@@ -46,6 +46,27 @@ npx vercel --prod
 
 **Alternative:** Push to GitHub, then import the repo at vercel.com/new (no CLI needed).
 
+## GitHub + Vercel CI setup
+
+This repo includes GitHub Actions for Vercel deployment at `.github/workflows/deploy.yml`.
+
+### Recommended setup
+
+1. Push this repo to GitHub under `COSMOS-02/Bridge-Coach`.
+2. In your GitHub repository, go to Settings > Secrets and variables > Actions.
+3. Add these secrets:
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
+4. On each push to `main`, the workflow will build and deploy to Vercel automatically.
+
+### Vercel project setup
+
+1. Go to [https://vercel.com/new](https://vercel.com/new).
+2. Import `COSMOS-02/Bridge-Coach`.
+3. Set the production branch to `main`.
+4. Add the same Vercel project details to GitHub secrets if needed.
+
 ## Auth note (MVP)
 
 Accounts are stored in your **browser localStorage** for now. This is fine for testing and demos. Before real launch, upgrade to **Supabase Auth** for secure cloud accounts.
