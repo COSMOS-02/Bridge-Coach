@@ -21,12 +21,12 @@ import type { UserProfile } from "@/lib/types";
 type UserContextValue = {
   user: UserProfile | null;
   ready: boolean;
-  register: (input: RegisterInput) => ReturnType<typeof registerUser>;
-  login: (email: string, password: string) => ReturnType<typeof loginUser>;
-  logout: () => void;
+  register: (input: RegisterInput) => Promise<Awaited<ReturnType<typeof registerUser>>>;
+  login: (email: string, password: string) => Promise<Awaited<ReturnType<typeof loginUser>>>;
+  logout: () => Promise<void>;
   updateProfile: (
     updates: Partial<Pick<UserProfile, "lifeStage" | "country" | "currency">>,
-  ) => UserProfile | null;
+  ) => Promise<UserProfile | null>;
 };
 
 const UserContext = createContext<UserContextValue | null>(null);
@@ -36,30 +36,40 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setUser(getSessionUser());
-    setReady(true);
+    let ignore = false;
+    void (async () => {
+      const currentUser = await getSessionUser();
+      if (!ignore) {
+        setUser(currentUser);
+        setReady(true);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  const register = useCallback((input: RegisterInput) => {
-    const result = registerUser(input);
+  const register = useCallback(async (input: RegisterInput) => {
+    const result = await registerUser(input);
     if (result.ok) setUser(result.user);
     return result;
   }, []);
 
-  const login = useCallback((email: string, password: string) => {
-    const result = loginUser(email, password);
+  const login = useCallback(async (email: string, password: string) => {
+    const result = await loginUser(email, password);
     if (result.ok) setUser(result.user);
     return result;
   }, []);
 
-  const logout = useCallback(() => {
-    logoutUser();
+  const logout = useCallback(async () => {
+    await logoutUser();
     setUser(null);
   }, []);
 
   const updateProfile = useCallback(
-    (updates: Partial<Pick<UserProfile, "lifeStage" | "country" | "currency">>) => {
-      const next = updateUserProfile(updates);
+    async (updates: Partial<Pick<UserProfile, "lifeStage" | "country" | "currency">>) => {
+      const next = await updateUserProfile(updates);
       if (next) setUser(next);
       return next;
     },

@@ -43,7 +43,7 @@ export function Header() {
               </span>
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => void logout()}
                 className="rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs font-medium text-slate-200 transition hover:bg-slate-800 sm:text-sm"
               >
                 Log out

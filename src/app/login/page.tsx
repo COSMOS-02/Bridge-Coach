@@ -20,12 +20,12 @@ export default function LoginPage() {
 
   if (ready && user) return null;
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const result = login(email, password);
+    const result = await login(email, password);
     setLoading(false);
 
     if (!result.ok) {

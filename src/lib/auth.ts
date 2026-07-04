@@ -1,7 +1,5 @@
 import type { CountryCode, Currency, UserLifeStage, UserProfile } from "./types";
 
-export const SESSION_KEY = "bridge-coach-session";
-export const USERS_KEY = "bridge-coach-users";
 export const STORAGE_KEY = "bridge-coach-assessment-result";
 
 export const LIFE_STAGES: {
@@ -77,40 +75,6 @@ export function lifeStageLabel(stage: UserLifeStage): string {
   return LIFE_STAGES.find((s) => s.value === stage)?.label ?? stage;
 }
 
-type StoredUser = UserProfile & { password: string };
-
-function readUsers(): StoredUser[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(USERS_KEY);
-    return raw ? (JSON.parse(raw) as StoredUser[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users: StoredUser[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-export function getSessionUser(): UserProfile | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as UserProfile) : null;
-  } catch {
-    return null;
-  }
-}
-
-export function setSessionUser(user: UserProfile | null) {
-  if (user) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-  } else {
-    localStorage.removeItem(SESSION_KEY);
-  }
-}
-
 export type RegisterInput = {
   name: string;
   email: string;
@@ -119,7 +83,36 @@ export type RegisterInput = {
   country: CountryCode;
 };
 
-export function registerUser(input: RegisterInput): { ok: true; user: UserProfile } | { ok: false; error: string } {
+type AuthResponse = { ok: true; user: UserProfile } | { ok: false; error: string };
+
+type MeResponse = { ok: true; user: UserProfile | null } | { ok: false; error: string };
+
+async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(path, {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+    ...init,
+  });
+  const data = (await response.json().catch(() => ({}))) as T & { error?: string };
+  if (!response.ok) {
+    throw new Error((data as { error?: string }).error ?? "Request failed");
+  }
+  return data;
+}
+
+export async function getSessionUser(): Promise<UserProfile | null> {
+  try {
+    const response = await requestJson<MeResponse>("/api/auth/me", { method: "GET" });
+    return response.ok ? response.user : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function registerUser(input: RegisterInput): Promise<AuthResponse> {
   const email = input.email.trim().toLowerCase();
   const name = input.name.trim();
 
@@ -133,70 +126,45 @@ export function registerUser(input: RegisterInput): { ok: true; user: UserProfil
     return { ok: false, error: "Password must be at least 6 characters." };
   }
 
-  const users = readUsers();
-  if (users.some((u) => u.email === email)) {
-    return { ok: false, error: "An account with this email already exists. Try logging in." };
+  try {
+    return await requestJson<AuthResponse>("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Registration failed." };
   }
-
-  const user: StoredUser = {
-    id: crypto.randomUUID(),
-    name,
-    email,
-    password: input.password,
-    lifeStage: input.lifeStage,
-    country: input.country,
-    currency: countryToCurrency(input.country),
-    createdAt: new Date().toISOString(),
-  };
-
-  writeUsers([...users, user]);
-  const { password: _, ...profile } = user;
-  setSessionUser(profile);
-  return { ok: true, user: profile };
 }
 
-export function loginUser(
-  email: string,
-  password: string,
-): { ok: true; user: UserProfile } | { ok: false; error: string } {
-  const normalized = email.trim().toLowerCase();
-  const users = readUsers();
-  const match = users.find((u) => u.email === normalized && u.password === password);
-
-  if (!match) {
-    return { ok: false, error: "Invalid email or password." };
+export async function loginUser(email: string, password: string): Promise<AuthResponse> {
+  try {
+    return await requestJson<AuthResponse>("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Login failed." };
   }
-
-  const { password: _, ...profile } = match;
-  setSessionUser(profile);
-  return { ok: true, user: profile };
 }
 
-export function logoutUser() {
-  setSessionUser(null);
+export async function logoutUser(): Promise<void> {
+  try {
+    await requestJson<{ ok: true }>("/api/auth/logout", { method: "POST" });
+  } catch {
+    // Ignore logout errors and clear client state.
+  }
 }
 
-export function updateUserProfile(
+export async function updateUserProfile(
   updates: Partial<Pick<UserProfile, "lifeStage" | "country" | "currency">>,
-): UserProfile | null {
-  const current = getSessionUser();
-  if (!current) return null;
-
-  const users = readUsers();
-  const index = users.findIndex((u) => u.id === current.id);
-  if (index === -1) return null;
-
-  const nextCountry = updates.country ?? current.country;
-  const next: StoredUser = {
-    ...users[index],
-    ...updates,
-    country: nextCountry,
-    currency: updates.currency ?? countryToCurrency(nextCountry),
-  };
-
-  users[index] = next;
-  writeUsers(users);
-  const { password: _, ...profile } = next;
-  setSessionUser(profile);
-  return profile;
+): Promise<UserProfile | null> {
+  try {
+    const response = await requestJson<AuthResponse>("/api/auth/update-profile", {
+      method: "POST",
+      body: JSON.stringify(updates),
+    });
+    return response.ok ? response.user : null;
+  } catch {
+    return null;
+  }
 }

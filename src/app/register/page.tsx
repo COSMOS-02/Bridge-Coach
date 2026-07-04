@@ -25,12 +25,12 @@ export default function RegisterPage() {
 
   if (ready && user) return null;
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const result = register({ name, email, password, lifeStage, country });
+    const result = await register({ name, email, password, lifeStage, country });
     setLoading(false);
 
     if (!result.ok) {
