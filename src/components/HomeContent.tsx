@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Header, Footer } from "@/components/Header";
 import { useUser } from "@/context/UserProvider";
 import { getStageContent } from "@/lib/stage-content";
@@ -9,15 +10,43 @@ import { lifeStageLabel } from "@/lib/auth";
 export function HomeContent() {
   const { user, ready } = useUser();
   const content = getStageContent(user?.lifeStage);
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowIntro(false), 1400);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="flex min-h-full flex-col cosmic-hero">
-      <div className="star-dots" />
-      <div className="cosmic-glow left-10 top-20 h-72 w-72 bg-sky-500/30" />
-      <div className="cosmic-glow right-10 top-32 h-64 w-64 bg-fuchsia-500/30" />
-      <Header />
+    <div className="relative flex min-h-full flex-col cosmic-hero">
+      <div className={`intro-overlay ${showIntro ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden="true">
+        <div className="intro-burst" />
+        <div className="intro-ring intro-ring-1" />
+        <div className="intro-ring intro-ring-2" />
+        <div className="intro-shard intro-shard-1" />
+        <div className="intro-shard intro-shard-2" />
+        <div className="intro-shard intro-shard-3" />
+        <div className="intro-shard intro-shard-4" />
+        <div className="intro-shard intro-shard-5" />
+        <div className="intro-shard intro-shard-6" />
+        <div className="intro-shard intro-shard-7" />
+        <div className="intro-particle intro-particle-1" />
+        <div className="intro-particle intro-particle-2" />
+        <div className="intro-particle intro-particle-3" />
+        <div className="intro-particle intro-particle-4" />
+        <div className="intro-particle intro-particle-5" />
+        <div className="intro-particle intro-particle-6" />
+        <div className="intro-particle intro-particle-7" />
+        <div className="intro-particle intro-particle-8" />
+      </div>
 
-      <main className="flex-1">
+      <div className={`relative z-10 flex min-h-full flex-col transition-all duration-1000 ${showIntro ? "translate-y-4 scale-[0.98] opacity-0" : "translate-y-0 scale-100 opacity-100"}`}>
+        <div className="star-dots" />
+        <div className="cosmic-glow left-10 top-20 h-72 w-72 bg-sky-500/30" />
+        <div className="cosmic-glow right-10 top-32 h-64 w-64 bg-fuchsia-500/30" />
+        <Header />
+
+        <main className="flex-1">
         {ready && user ? (
           <div className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
             <div className="mx-auto max-w-6xl px-4 py-3 text-sm text-slate-200 sm:px-6">
@@ -121,7 +150,8 @@ export function HomeContent() {
         </section>
       </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 }
