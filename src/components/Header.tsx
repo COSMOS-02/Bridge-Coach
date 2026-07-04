@@ -105,6 +105,9 @@ export function Footer() {
             <Link href="/terms" className="transition hover:text-cyan-300">
               Terms
             </Link>
+            <a href="mailto:hello@bridge-coach.app" className="transition hover:text-cyan-300">
+              Contact
+            </a>
           </div>
         </div>
         <p className="mt-6 text-xs text-slate-500">
