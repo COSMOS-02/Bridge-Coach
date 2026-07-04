@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #020617;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
@@ -12,8 +12,12 @@
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at top, rgba(96,165,250,0.08), transparent 18%),
+    radial-gradient(circle at 80% 20%, rgba(168,85,247,0.08), transparent 22%),
+    radial-gradient(circle at 50% 95%, rgba(16,185,129,0.08), transparent 22%),
+    #020617;
   color: var(--foreground);
+  min-height: 100vh;
 }
 
 * {
@@ -23,4 +27,39 @@ body {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+.cosmic-hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, rgba(56,189,248,0.16), transparent 24%),
+    radial-gradient(circle at 80% 15%, rgba(168,85,247,0.14), transparent 22%),
+    linear-gradient(180deg, rgba(15,23,42,0.92), rgba(15,23,42,0.72));
+}
+
+.cosmic-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 0.3rem),
+    radial-gradient(circle at 75% 25%, rgba(248,113,113,0.16), transparent 0.45rem);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.star-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.9) 0.8px, transparent 0.8px),
+    radial-gradient(circle, rgba(255,255,255,0.45) 0.6px, transparent 0.6px);
+  background-size: 60px 60px, 100px 100px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.cosmic-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.72;
 }

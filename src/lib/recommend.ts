@@ -259,6 +259,50 @@ function inferTopStream(paths: CareerPath[]): string {
   return sorted[0]?.[0] ?? "Explore multiple streams";
 }
 
+function getStageAwareNextSteps(
+  template: PathTemplate,
+  stage: UserLifeStage,
+  _answers: AssessmentAnswers,
+): string[] {
+  if (stage === "school-kid" || stage === "class-12" || stage === "college") {
+    return template.nextSteps;
+  }
+
+  if (stage === "dropout") {
+    return [
+      "Pick one short certification or diploma route that fits this path",
+      "Build a proof-of-work project or portfolio piece",
+      "List 5 target roles or local employers to approach",
+      "Create a simple resume and start applying this week",
+    ];
+  }
+
+  if (stage === "job-seeker") {
+    return [
+      "Refresh your resume and tailor it to 3 target roles",
+      "Build or update a portfolio, GitHub, or case-study set",
+      "Apply to 10 targeted roles and reach out to 5 contacts",
+      "Track feedback and improve based on the next interview round",
+    ];
+  }
+
+  if (stage === "interview-prep") {
+    return [
+      "Review the most likely interview questions for this path",
+      "Run 2 mock interviews and note weak spots",
+      "Prepare one portfolio story, project demo, or case answer",
+      "Create a 3-day prep plan before interview day",
+    ];
+  }
+
+  return [
+    "Pick one skill to upskill this month for this path",
+    "Build a portfolio or proof-of-work artifact",
+    "Compare 3 target roles, companies, or switch paths",
+    "Set one concrete action for this week and one for next month",
+  ];
+}
+
 /**
  * Rule-based recommendation engine for Phase 1.
  * Replace or augment with OpenAI via src/lib/ai/recommend.ts later.
@@ -313,6 +357,7 @@ export function generateRecommendations(
     const { score, ...rest } = template;
     return {
       ...rest,
+      nextSteps: getStageAwareNextSteps(template, lifeStage, normalized),
       fitScore: clampScore(score(normalized) + stageBonus(template.id, lifeStage, normalized)),
     };
   })
