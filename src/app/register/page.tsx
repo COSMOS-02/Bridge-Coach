@@ -103,27 +103,24 @@ export default function RegisterPage() {
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Country</h2>
             <p className="mt-1 text-sm text-slate-500">
-              We show plan pricing in {selectedCountry?.currency === "INR" ? "INR (₹)" : "USD ($)"}{" "}
-              based on your country.
+              Pick your country to set pricing and payment currency for your plan.
             </p>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              {COUNTRIES.map((c) => (
-                <button
-                  key={c.value}
-                  type="button"
-                  onClick={() => setCountry(c.value)}
-                  className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition ${
-                    country === c.value
-                      ? "border-teal-500 bg-teal-50 ring-2 ring-teal-200"
-                      : "border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  <span>
-                    {c.flag} {c.label}
-                  </span>
-                  <span className="text-xs font-medium text-slate-500">{c.currency}</span>
-                </button>
-              ))}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-slate-700">Choose your country</label>
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value as CountryCode)}
+                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-200"
+              >
+                {COUNTRIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.flag} {c.label} · {c.currency}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-3 text-sm text-slate-500">
+                Pricing will be shown in {selectedCountry?.currency ?? "USD"} for your selection.
+              </p>
             </div>
           </section>
 

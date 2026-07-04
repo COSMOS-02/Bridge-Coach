@@ -7,9 +7,9 @@ export type UserLifeStage =
   | "interview-prep"
   | "employed";
 
-export type CountryCode = "IN" | "US" | "GB" | "CA" | "AU" | "OTHER";
+export type CountryCode = "IN" | "US" | "GB" | "CA" | "AU" | "SG" | "AE" | "DE" | "FR" | "NL" | "SE" | "NZ" | "ZA" | "OTHER";
 
-export type Currency = "INR" | "USD";
+export type Currency = "INR" | "USD" | "EUR" | "GBP" | "AUD" | "CAD" | "SGD" | "AED";
 
 export type UserProfile = {
   id: string;

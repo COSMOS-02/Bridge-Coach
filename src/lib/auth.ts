@@ -54,9 +54,17 @@ export const COUNTRIES: {
 }[] = [
   { value: "IN", label: "India", currency: "INR", flag: "🇮🇳" },
   { value: "US", label: "United States", currency: "USD", flag: "🇺🇸" },
-  { value: "GB", label: "United Kingdom", currency: "USD", flag: "🇬🇧" },
-  { value: "CA", label: "Canada", currency: "USD", flag: "🇨🇦" },
-  { value: "AU", label: "Australia", currency: "USD", flag: "🇦🇺" },
+  { value: "GB", label: "United Kingdom", currency: "GBP", flag: "🇬🇧" },
+  { value: "CA", label: "Canada", currency: "CAD", flag: "🇨🇦" },
+  { value: "AU", label: "Australia", currency: "AUD", flag: "🇦🇺" },
+  { value: "SG", label: "Singapore", currency: "SGD", flag: "🇸🇬" },
+  { value: "AE", label: "United Arab Emirates", currency: "AED", flag: "🇦🇪" },
+  { value: "DE", label: "Germany", currency: "EUR", flag: "🇩🇪" },
+  { value: "FR", label: "France", currency: "EUR", flag: "🇫🇷" },
+  { value: "NL", label: "Netherlands", currency: "EUR", flag: "🇳🇱" },
+  { value: "SE", label: "Sweden", currency: "EUR", flag: "🇸🇪" },
+  { value: "NZ", label: "New Zealand", currency: "AUD", flag: "🇳🇿" },
+  { value: "ZA", label: "South Africa", currency: "USD", flag: "🇿🇦" },
   { value: "OTHER", label: "Other country", currency: "USD", flag: "🌍" },
 ];
 

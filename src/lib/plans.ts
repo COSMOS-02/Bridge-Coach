@@ -59,10 +59,64 @@ export function getPricingLabel(currency: Currency): {
     };
   }
 
+  if (currency === "USD") {
+    return {
+      badge: "International · Pay in USD ($)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & international payments via Stripe",
+      paymentNote: "USD pricing at launch · global access",
+    };
+  }
+
+  if (currency === "EUR") {
+    return {
+      badge: "Europe · Pay in EUR (€)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & regional payments via Stripe",
+      paymentNote: "EUR pricing at launch · EU-friendly access",
+    };
+  }
+
+  if (currency === "GBP") {
+    return {
+      badge: "UK · Pay in GBP (£)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & local checkout support",
+      paymentNote: "GBP pricing at launch · UK-friendly access",
+    };
+  }
+
+  if (currency === "AUD") {
+    return {
+      badge: "Australia · Pay in AUD (A$)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & regional checkout support",
+      paymentNote: "AUD pricing at launch · Australia-friendly access",
+    };
+  }
+
+  if (currency === "CAD") {
+    return {
+      badge: "Canada · Pay in CAD (C$)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & regional checkout support",
+      paymentNote: "CAD pricing at launch · Canada-friendly access",
+    };
+  }
+
+  if (currency === "SGD") {
+    return {
+      badge: "Singapore · Pay in SGD (S$)",
+      priceLine: "Pricing at launch",
+      subline: "Cards & regional checkout support",
+      paymentNote: "SGD pricing at launch · Singapore-friendly access",
+    };
+  }
+
   return {
-    badge: "International · Pay in USD ($)",
+    badge: `International · Pay in ${currency}`,
     priceLine: "Pricing at launch",
-    subline: "Cards & international payments via Stripe",
-    paymentNote: "USD pricing at launch · global access",
+    subline: "Cards & regional payments via Stripe",
+    paymentNote: `${currency} pricing at launch · global access`,
   };
 }

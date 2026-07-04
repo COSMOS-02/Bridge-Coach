@@ -42,6 +42,9 @@ export function HomeContent() {
 
       <div className={`relative z-10 flex min-h-full flex-col transition-all duration-1000 ${showIntro ? "translate-y-4 scale-[0.98] opacity-0" : "translate-y-0 scale-100 opacity-100"}`}>
         <div className="space-asteroid-belt" aria-hidden="true" />
+        <div className="space-dust" aria-hidden="true" />
+        <div className="space-planet planet-one" aria-hidden="true" />
+        <div className="space-planet planet-two" aria-hidden="true" />
         <div className="space-orbit orbit-one" aria-hidden="true" />
         <div className="space-orbit orbit-two" aria-hidden="true" />
         <div className="space-asteroid asteroid-one" aria-hidden="true" />
