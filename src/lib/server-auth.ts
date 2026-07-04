@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
-import type { CountryCode, Currency, UserLifeStage, UserProfile } from "./types";
+import type { AssessmentResult, CountryCode, Currency, UserLifeStage, UserProfile } from "./types";
 import type { RegisterInput } from "./auth";
 
 type StoredUser = UserProfile & {
@@ -16,9 +16,16 @@ type SessionRecord = {
   expiresAt: string;
 };
 
+type StoredAssessment = {
+  userId: string;
+  result: AssessmentResult;
+  updatedAt: string;
+};
+
 type AuthStore = {
   users: StoredUser[];
   sessions: SessionRecord[];
+  assessments: StoredAssessment[];
 };
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -30,7 +37,7 @@ async function ensureStoreFile() {
   try {
     await fs.access(AUTH_STORE_PATH);
   } catch {
-    const initialStore: AuthStore = { users: [], sessions: [] };
+    const initialStore: AuthStore = { users: [], sessions: [], assessments: [] };
     await fs.writeFile(AUTH_STORE_PATH, JSON.stringify(initialStore, null, 2));
   }
 }
@@ -162,6 +169,25 @@ export async function updateStoredUserProfile(
   store.users[index] = nextUser;
   await writeStore(store);
   return toPublicUser(nextUser);
+}
+
+export async function saveAssessmentResult(userId: string, result: AssessmentResult | null): Promise<AssessmentResult | null> {
+  const store = await readStore();
+  if (!result) {
+    const existing = store.assessments.find((entry) => entry.userId === userId);
+    return existing?.result ?? null;
+  }
+
+  const nextAssessment: StoredAssessment = {
+    userId,
+    result,
+    updatedAt: new Date().toISOString(),
+  };
+
+  store.assessments = store.assessments.filter((entry) => entry.userId !== userId);
+  store.assessments.push(nextAssessment);
+  await writeStore(store);
+  return result;
 }
 
 function countryToCurrency(country: CountryCode): Currency {

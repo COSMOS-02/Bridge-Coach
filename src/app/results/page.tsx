@@ -51,15 +51,46 @@ export default function ResultsPage() {
   const roadmap = useMemo(() => (result ? buildRoadmap(result) : null), [result]);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
-    if (raw) {
+    let ignore = false;
+
+    async function loadResult() {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw) as AssessmentResult;
+          if (!ignore) {
+            setResult(parsed);
+          }
+        } catch {
+          if (!ignore) {
+            setResult(null);
+          }
+        }
+      }
+
       try {
-        setResult(JSON.parse(raw) as AssessmentResult);
+        const response = await fetch("/api/auth/assessment", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (!ignore && data?.result) {
+          setResult(data.result as AssessmentResult);
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data.result));
+        }
       } catch {
-        setResult(null);
+        // Ignore fetch errors and fall back to local session result.
+      }
+
+      if (!ignore) {
+        setReady(true);
       }
     }
-    setReady(true);
+
+    void loadResult();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   function handleChatSubmit(event: FormEvent<HTMLFormElement>) {

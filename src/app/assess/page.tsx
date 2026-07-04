@@ -76,7 +76,7 @@ export default function AssessPage() {
     setForm((prev) => ({ ...prev, [question.id]: value }));
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (!canContinue) return;
 
     if (step < questions.length - 1) {
@@ -87,6 +87,18 @@ export default function AssessPage() {
     const answers = form as AssessmentAnswers;
     const result = generateRecommendations(answers, user?.lifeStage ?? guestStage);
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+
+    try {
+      await fetch("/api/auth/assessment", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result),
+      });
+    } catch {
+      // Ignore persistence errors and still continue to results.
+    }
+
     router.push("/results");
   }
 
