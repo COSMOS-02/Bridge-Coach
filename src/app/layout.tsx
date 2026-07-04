@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   title: "Bridge Coach — AI Career Navigator from School to Career",
   description:
     "Lifelong AI career coach for Indian and global users. Stream selection, college, jobs, interview prep — personalized paths with pros, cons, and fit scores.",
+  metadataBase: new URL("https://bridge-coach-p6on0wwdt-cosmos-02s-projects.vercel.app"),
+  openGraph: {
+    title: "Bridge Coach",
+    description: "Personalized career guidance from school to career.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

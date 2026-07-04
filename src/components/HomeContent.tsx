@@ -98,6 +98,10 @@ export function HomeContent() {
                   {content.ctaSecondary}
                 </Link>
               </div>
+              <div className="mt-6 rounded-2xl border border-cyan-500/20 bg-slate-900/70 p-4 text-sm text-slate-300">
+                <p className="font-semibold text-cyan-200">Launch-ready support</p>
+                <p className="mt-1">Need help? Use the assessment, account settings, or contact us at hello@bridge-coach.app.</p>
+              </div>
               <p className="mt-4 text-xs text-slate-400">
                 {content.assessIntro} · Guidance only, not a job guarantee
               </p>

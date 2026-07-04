@@ -1,4 +1,5 @@
 import type { CountryCode, Currency, UserLifeStage, UserProfile } from "./types";
+import { normalizeEmail, validatePassword } from "./security";
 
 export const STORAGE_KEY = "bridge-coach-assessment-result";
 
@@ -113,7 +114,7 @@ export async function getSessionUser(): Promise<UserProfile | null> {
 }
 
 export async function registerUser(input: RegisterInput): Promise<AuthResponse> {
-  const email = input.email.trim().toLowerCase();
+  const email = normalizeEmail(input.email);
   const name = input.name.trim();
 
   if (!name || name.length < 2) {
@@ -122,8 +123,9 @@ export async function registerUser(input: RegisterInput): Promise<AuthResponse> 
   if (!email.includes("@")) {
     return { ok: false, error: "Please enter a valid email address." };
   }
-  if (input.password.length < 6) {
-    return { ok: false, error: "Password must be at least 6 characters." };
+  const passwordCheck = validatePassword(input.password);
+  if (!passwordCheck.ok) {
+    return { ok: false, error: passwordCheck.error ?? "Password is invalid." };
   }
 
   try {

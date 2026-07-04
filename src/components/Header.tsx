@@ -41,6 +41,12 @@ export function Header() {
               <span className="hidden rounded-lg bg-cyan-500/10 px-2 py-1 text-xs font-medium text-cyan-200 lg:inline">
                 {lifeStageLabel(user.lifeStage)} · {user.currency}
               </span>
+              <Link
+                href="/account"
+                className="rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs font-medium text-slate-200 transition hover:bg-slate-800 sm:text-sm"
+              >
+                Account
+              </Link>
               <button
                 type="button"
                 onClick={() => void logout()}
@@ -92,6 +98,12 @@ export function Footer() {
             </Link>
             <Link href="/register" className="transition hover:text-cyan-300">
               Sign up
+            </Link>
+            <Link href="/privacy" className="transition hover:text-cyan-300">
+              Privacy
+            </Link>
+            <Link href="/terms" className="transition hover:text-cyan-300">
+              Terms
             </Link>
           </div>
         </div>
