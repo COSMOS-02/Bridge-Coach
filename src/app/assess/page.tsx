@@ -8,7 +8,7 @@ import { getQuestionsForStage, STORAGE_KEY } from "@/lib/questions";
 import { generateRecommendations } from "@/lib/recommend";
 import { getStageContent } from "@/lib/stage-content";
 import { useUser } from "@/context/UserProvider";
-import type { AssessmentAnswers } from "@/lib/types";
+import type { AssessmentAnswers, UserLifeStage } from "@/lib/types";
 
 type FormState = Partial<AssessmentAnswers> & {
   favoriteSubjects?: string[];
@@ -23,20 +23,21 @@ export default function AssessPage() {
   const { user, ready } = useUser();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(initialState);
+  const [guestStage, setGuestStage] = useState<UserLifeStage>("class-12");
 
   const questions = useMemo(
-    () => (user ? getQuestionsForStage(user.lifeStage) : []),
-    [user],
+    () => getQuestionsForStage(user?.lifeStage ?? guestStage),
+    [user, guestStage],
   );
-  const content = getStageContent(user?.lifeStage);
+  const content = getStageContent(user?.lifeStage ?? guestStage);
   const question = questions[step];
   const progress = questions.length ? ((step + 1) / questions.length) * 100 : 0;
 
   useEffect(() => {
-    if (ready && !user) {
-      router.replace("/register");
+    if (ready && user) {
+      setGuestStage(user.lifeStage);
     }
-  }, [ready, user, router]);
+  }, [ready, user]);
 
   const canContinue = useMemo(() => {
     if (!question) return false;
@@ -49,7 +50,7 @@ export default function AssessPage() {
     return typeof value === "string" && value.length > 0;
   }, [form, question]);
 
-  if (!ready || !user) {
+  if (!ready) {
     return (
       <div className="flex min-h-full items-center justify-center bg-slate-50">
         <p className="text-sm text-slate-500">Loading assessment…</p>
@@ -76,7 +77,7 @@ export default function AssessPage() {
   }
 
   function handleNext() {
-    if (!canContinue || !user) return;
+    if (!canContinue) return;
 
     if (step < questions.length - 1) {
       setStep((s) => s + 1);
@@ -84,7 +85,7 @@ export default function AssessPage() {
     }
 
     const answers = form as AssessmentAnswers;
-    const result = generateRecommendations(answers, user.lifeStage);
+    const result = generateRecommendations(answers, user?.lifeStage ?? guestStage);
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
     router.push("/results");
   }
@@ -106,6 +107,13 @@ export default function AssessPage() {
         <div className="mb-4 rounded-2xl bg-indigo-50 px-4 py-3 text-sm text-indigo-900 ring-1 ring-indigo-100">
           {content.assessIntro} · {questions.length} questions for your stage
         </div>
+
+        {!user ? (
+          <div className="mb-6 rounded-2xl border border-teal-200 bg-teal-50/70 p-4 text-sm text-teal-800">
+            <div className="font-semibold">Free one-time assessment is available right now</div>
+            <p className="mt-1">You can start without creating an account, and sign up later if you want your results saved.</p>
+          </div>
+        ) : null}
 
         <div className="mb-6">
           <p className="text-sm font-medium text-teal-700">
@@ -183,11 +191,16 @@ export default function AssessPage() {
           </div>
         ) : null}
 
-        <p className="mt-6 text-center text-xs text-slate-500">
+        <div className="mt-6 flex flex-col items-center gap-2 text-center text-xs text-slate-500 sm:flex-row sm:justify-center">
           <Link href="/plans" className="text-teal-700 underline-offset-2 hover:underline">
             View plans
           </Link>
-        </p>
+          {!user ? (
+            <Link href="/register" className="text-indigo-700 underline-offset-2 hover:underline">
+              Create account later
+            </Link>
+          ) : null}
+        </div>
       </main>
       <Footer />
     </div>

@@ -97,10 +97,10 @@ export default function PlansPage() {
             <li>• Change country/currency in account settings (coming soon).</li>
           </ul>
           <Link
-            href={user ? "/assess" : "/register"}
+            href="/assess"
             className="mt-6 inline-flex rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
           >
-            {user ? "Take your assessment" : "Create free account"}
+            Start free assessment
           </Link>
         </section>
       </main>

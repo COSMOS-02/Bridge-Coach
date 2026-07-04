@@ -94,10 +94,10 @@ export default function ResultsPage() {
             Complete the assessment first to see your personalized career paths.
           </p>
           <Link
-            href={user ? "/assess" : "/register"}
+            href="/assess"
             className="mt-6 rounded-xl bg-gradient-to-r from-teal-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white"
           >
-            {user ? "Start assessment" : "Sign up & start"}
+            Start free assessment
           </Link>
         </main>
         <Footer />
