@@ -1,83 +1,118 @@
 # Bridge Coach
 
-**Bridge Coach** is an AI-powered lifelong career navigator. Phase 1 helps students and professionals find the right path with personalized assessments, pros/cons, fit scores, and subscription plans.
+**Bridge Coach** is your personalized AI companion for life and career navigation, helping students and professionals make informed academic and career decisions through intelligent, personalized guidance.
 
-> Career guidance only — not a job or admission guarantee.
-
-## What's included
-
-- **Sign up / Log in** with life stage + country selection
-- **7 life stages:** School kid, Class 12, College, Dropout, Job seeker, Interview prep, Employed
-- **Personalized homepage** based on your life stage
-- **Stage-specific assessments** (12–16 questions per stage)
-- **Career path reports** with fit scores, pros/cons, next steps
-- **Plans page** with INR (India) or USD (international) payment labels
-- Rule-based recommendations (OpenAI-ready later)
-
-## Run locally
-
-```bash
-cd C:\Users\abhas\Projects\bridge-coach
-npm install
-npm run dev
-```
-
-Open **http://localhost:3000**
-
-### Try the full flow
-
-1. **Sign up** at `/register` — pick life stage + country
-2. See your **personalized homepage**
-3. Take the **assessment** (questions adapt to your stage)
-4. View **results** and **plans** (INR or USD based on country)
-
-## Deploy to Vercel (live website)
-
-1. Create a free account at [vercel.com](https://vercel.com)
-2. In terminal:
-
-```bash
-cd C:\Users\abhas\Projects\bridge-coach
-npx vercel login
-npx vercel --prod
-```
-
-3. Follow prompts — Vercel gives you a public URL like `https://bridge-coach.vercel.app`
-
-**Alternative:** Push to GitHub, then import the repo at vercel.com/new (no CLI needed).
-
-## GitHub + Vercel CI setup
-
-This repo includes GitHub Actions for Vercel deployment at `.github/workflows/deploy.yml`.
-
-### Recommended setup
-
-1. Push this repo to GitHub under `COSMOS-02/Bridge-Coach`.
-2. In your GitHub repository, go to Settings > Secrets and variables > Actions.
-3. Add these secrets:
-   - `VERCEL_TOKEN`
-   - `VERCEL_ORG_ID`
-   - `VERCEL_PROJECT_ID`
-4. On each push to `main`, the workflow will build and deploy to Vercel automatically.
-
-### Vercel project setup
-
-1. Go to [https://vercel.com/new](https://vercel.com/new).
-2. Import `COSMOS-02/Bridge-Coach`.
-3. Set the production branch to `main`.
-4. Add the same Vercel project details to GitHub secrets if needed.
-
-## Auth note (MVP)
-
-Accounts are stored in your **browser localStorage** for now. This is fine for testing and demos. Before real launch, upgrade to **Supabase Auth** for secure cloud accounts.
-
-## Next steps
-
-- Supabase Auth + saved reports
-- Razorpay (INR) / Stripe (USD) at launch pricing
-- OpenAI-powered deeper reports
-- Account settings (change life stage / country)
+> **Disclaimer:** Bridge Coach provides career guidance and recommendations for informational purposes only. It does not guarantee admissions, employment, or career outcomes.
 
 ---
 
-Built with **JARVIS** · Bridge Coach · India-first, global-ready
+## ✨ Features
+
+- 🔐 Secure Sign Up / Log In with life stage and country selection
+- 🎯 Personalized dashboard based on your current life stage
+- 📝 Stage-specific career assessments (12–16 questions)
+- 📊 Personalized career reports with fit scores, strengths, challenges, and recommended next steps
+- 🌍 India-first experience with support for international users
+- 💳 Localized pricing (INR for India, USD for international users)
+- 🤖 AI-ready architecture for future personalized guidance and insights
+
+---
+
+## 🚀 Live Demo
+
+**Coming Soon**
+
+The public version of Bridge Coach will be available soon.
+
+---
+
+## 🛠️ Run Locally
+
+Install project dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+**http://localhost:3000**
+
+---
+
+## 📱 User Journey
+
+1. Create your account.
+2. Select your life stage and country.
+3. Access your personalized dashboard.
+4. Complete your career assessment.
+5. Receive personalized career insights and recommendations.
+6. Explore available plans and future AI-powered features.
+
+---
+
+## 🛠️ Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Vercel
+
+---
+
+## 🚧 Project Status
+
+Bridge Coach is currently under active development.
+
+New features, AI capabilities, and platform improvements are continuously being added.
+
+---
+
+## 🗺️ Roadmap
+
+- ✅ Personalized career assessments
+- ✅ Stage-based user experience
+- 🚧 Secure cloud authentication
+- 🚧 Saved career reports
+- 🚧 AI-powered personalized recommendations
+- 🚧 Subscription management
+- 🚧 Resume & Interview Coach
+- 🚧 Mobile application
+
+---
+
+## 🤝 Contributing
+
+Contributions, ideas, bug reports, and feature suggestions are welcome.
+
+Please read the project's contribution guidelines before submitting issues or pull requests.
+
+---
+
+## 🔒 Security
+
+If you discover a security vulnerability, please report it responsibly by contacting:
+
+**bridgecoach.contact@gmail.com**
+
+Please avoid publicly disclosing security issues until they have been reviewed.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<p align="center">
+  <strong>Bridge Coach</strong><br>
+  <em>Your Personalized AI Companion for Life & Career Navigation</em>
+</p>
